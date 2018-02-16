@@ -23,7 +23,7 @@ def get_romset(mamexml, blacklist):
             continue
         
         if (cloneof not in romset):
-            romset[cloneof] = list()
+            romset[cloneof.lower()] = list()
 
         romset[cloneof].append(child)
     

@@ -30,12 +30,23 @@ def splitzip_to_merged7z(romset):
         shutil.rmtree(name)
 
 
-def keep_only_set(romset, folder):
-    for filename in os.listdir(folder):
-        if (filename not in romset):
-            #os.remove("{0}/{1}".format(folder, filename))
-            path = "{0}/{1}".format(folder, filename)
+def keep_only_set(romset, folder, remove):
+    i = 0
+    j = 0
+    for filename in sorted(os.listdir(folder)):
+        noext=os.path.splitext(filename.lower())[0]
+        if (noext not in romset):
+            i += 1
+            path = "{0}{1}".format(folder, filename)
             if (os.path.isdir(path)):
-                shutil.rmtree(path)
+                if (remove)
+                    shutil.rmtree(path)
+                print("remove dir: {0}".format(path))
             else:
-                os.remove(path)
+                if (remove):
+                    #os.remove(path)
+                print("remove file: {0}".format(path))
+        else:
+            j += 1
+    print("Removed {0} files".format(i))
+    print("Found {0} files from the romset".format(j))

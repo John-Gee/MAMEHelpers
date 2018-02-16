@@ -25,12 +25,11 @@ def get_transmission_files(header, torrentid):
                    '    },'
                    '    "method": "torrent-get"'
                    '}')
-    print (postdata)
     data = web.get_json_data_from_post(URL, header, postdata)
     if (len(data["arguments"]["torrents"]) < 0):
         print('An error occured, no file was found')
     else:
-        print(data)
+        #print(data)
         return data['arguments']['torrents'][0]['files']
 
 
@@ -39,16 +38,21 @@ def set_wanted_files(header, torrentid, tfiles, files):
     ids = []
     for fil in iter(tfiles):
         filename = os.path.split(fil["name"])[1]
-        if (filename in files):
+        if (filename.lower() in files):
             ids.append(str(i))
         i = i + 1
     if (len(ids) > len(files)):
-        print("The len are not in good proportion! {0} vs {1}".format(
+        print("The lens are not in good proportion! {0} ids vs {1} files".format(
             len(files), len(ids)))
+        return
     else:
-        print("The len are in good proportion! {0} vs {1}".format(
+        print("The lens are in good proportion! {0} ids vs {1} files".format(
             len(files), len(ids)))
+
+    if (len(ids) > 0):
         send_wanted_query(header, torrentid, ids)
+    else:
+        print("No query needed for folders")
 
 
 def set_wanted_folders(header, torrentid, tfiles, folders):
@@ -56,17 +60,21 @@ def set_wanted_folders(header, torrentid, tfiles, folders):
     ids = []
     for fil in iter(tfiles):
         folder = os.path.split(os.path.split(fil["name"])[0])[1]
-        print(folder)
-        if (folder in folders):
+        if (folder.lower() in folders):
             ids.append(str(i))
         i = i + 1
     if (len(ids) > len(folders)):
-        print("The len are not in good proportion! {0} vs {1}".format(
+        print("The lens are not in good proportion! {0} ids vs {1} folders".format(
             len(folders), len(ids)))
+        return
     else:
-        print("The len are in good proportion! {0} vs {1}".format(
+        print("The lens are in good proportion! {0} ids vs {1} folders".format(
             len(folders), len(ids)))
-    send_wanted_query(header, torrentid, ids)
+
+    if (len(ids) > 0):
+        send_wanted_query(header, torrentid, ids)
+    else:
+        print("No query needed for folders")
 
 
 def send_wanted_query(header, torrentid, ids):
@@ -79,7 +87,9 @@ def send_wanted_query(header, torrentid, ids):
                    '    },'
                    '    "method": "torrent-set"'
                    '}')
+    print(postdata)
     code, text = web.post_data_to_url(URL, header, postdata)
+    print('query posted')
     print(text)
 
 
