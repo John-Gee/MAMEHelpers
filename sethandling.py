@@ -39,12 +39,12 @@ def keep_only_set(romset, folder, remove):
             i += 1
             path = "{0}{1}".format(folder, filename)
             if (os.path.isdir(path)):
-                if (remove)
+                if (remove):
                     shutil.rmtree(path)
                 print("remove dir: {0}".format(path))
             else:
                 if (remove):
-                    #os.remove(path)
+                    os.remove(path)
                 print("remove file: {0}".format(path))
         else:
             j += 1
